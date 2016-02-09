@@ -34,7 +34,6 @@ var Message = (function () {
                     digit_info.on_latest();
                     digit_info.show_chart(sessionStorage.getItem('underlying'), response.history.prices);
                 } else if(response.req_id === 2){
-                    digit_info.chart.destroy();
                     digit_info.show_chart(response.echo_req.ticks_history, response.history.prices);
                 } else
                     Tick.processHistory(response);

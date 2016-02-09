@@ -79,6 +79,8 @@ BetAnalysis.DigitInfoWS = function() {
 
     this.spots = [];
     this.stream_id = null;
+    this.prev_min=[-1,-1];
+    this.prev_max=[-1,-1];
 };
 
 BetAnalysis.DigitInfoWS.prototype = {
@@ -119,6 +121,7 @@ BetAnalysis.DigitInfoWS.prototype = {
                 BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
                 that.stream_id = null;
             }
+            that.chart.destroy();
             BinarySocket.send(request);
         };
         $('[name=underlying]', form).on('change',  get_latest ).addClass('unbind_later');
@@ -175,6 +178,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
+            //if(prev_min[])
         }
 
         if (min_max_counter[max] === 1) {

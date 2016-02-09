@@ -61935,6 +61935,8 @@ var Barriers = (function () {
 
     this.spots = [];
     this.stream_id = null;
+    this.prev_min=[-1,-1];
+    this.prev_max=[-1,-1];
 };
 
 BetAnalysis.DigitInfoWS.prototype = {
@@ -61975,6 +61977,7 @@ BetAnalysis.DigitInfoWS.prototype = {
                 BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
                 that.stream_id = null;
             }
+            that.chart.destroy();
             BinarySocket.send(request);
         };
         $('[name=underlying]', form).on('change',  get_latest ).addClass('unbind_later');
@@ -62031,6 +62034,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
+            //if(prev_min[])
         }
 
         if (min_max_counter[max] === 1) {
@@ -64543,7 +64547,6 @@ var Message = (function () {
                     digit_info.on_latest();
                     digit_info.show_chart(sessionStorage.getItem('underlying'), response.history.prices);
                 } else if(response.req_id === 2){
-                    digit_info.chart.destroy();
                     digit_info.show_chart(response.echo_req.ticks_history, response.history.prices);
                 } else
                     Tick.processHistory(response);
@@ -64644,15 +64647,11 @@ var Price = (function() {
             if (!endTime2) {
                 var trading_times = Durations.trading_times();
                 if (trading_times.hasOwnProperty(endDate2) && typeof trading_times[endDate2][underlying.value] === 'object' && trading_times[endDate2][underlying.value].length && trading_times[endDate2][underlying.value][0] !== '--') {
-                    if( trading_times[endDate2][underlying.value].length>1)
-                        endTime2 = trading_times[endDate2][underlying.value][1];
-                    else
-                         endTime2=trading_times[endDate2][underlying.value];
+                    endTime2 = trading_times[endDate2][underlying.value];
                 }
             }
 
             proposal['date_expiry'] = moment.utc(endDate2 + " " + endTime2).unix();
-            console.log(proposal['date_expiry']+"-"+endTime2+"-"+endDate2+"-"+underlying.value);
             // For stopping tick trade behaviour
             proposal['duration_unit'] = "m";
         }
