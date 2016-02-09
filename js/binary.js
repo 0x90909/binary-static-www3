@@ -61941,7 +61941,6 @@ var Barriers = (function () {
 BetAnalysis.DigitInfoWS.prototype = {
     add_content: function(){
         var domain = document.domain.split('.').slice(-2).join('.');
-        domain.replace(domain[0],domain[0].toUpperCase());
         var contentId = document.getElementById('tab_last_digit-content'),
             content = '<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
@@ -61951,7 +61950,7 @@ BetAnalysis.DigitInfoWS.prototype = {
                         '</form>'+
                         '</div>'+
                         '<div id="last_digit_histo" class="grd-grid-8 grd-grid-mobile-12 grd-centered"></div>'+
-                        text.localize('<div id="last_digit_title" class="grd-hide">'+ domain +' - Last digits for the latest %1 ticks on %2</div>'+
+                        text.localize('<div id="last_digit_title" class="grd-hide">'+ domain.replace(domain[0],domain[0].toUpperCase()) +' - Last digits for the latest %1 ticks on %2</div>'+
                         '</div>');
         contentId.innerHTML = content;
         $('[name=underlying]').val($('#underlying option:selected').val());
