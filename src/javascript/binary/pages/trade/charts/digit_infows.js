@@ -79,21 +79,40 @@ BetAnalysis.DigitInfoWS = function() {
 
     this.spots = [];
     this.stream_id = null;
+    this.updateChart = 0; //Removes anomalies for slow connections, yes like interstellar anomalies :D
+    // To avoid too many greens and reds
+    this.prev_min_index = -1;
+    this.prev_max_index = -1;
 };
 
 BetAnalysis.DigitInfoWS.prototype = {
     add_content: function(){
+        var domain = document.domain.split('.').slice(-2).join('.'),
+            underlyings =[];
+        var symbols = Symbols.getAllSymbols();
+        i=0;
+        for(var key in symbols){
+            if(symbols[key].split(" ")[0] === 'Random'){
+                underlyings[i++] = key;
+            }
+        }
+        underlyings = underlyings.sort();
+        var elem = '<select class="smallfont" name="underlying">';
+        for(i=0;i<underlyings.length;i++){
+            elem = elem + '<option value="'+underlyings[i]+'">'+symbols[underlyings[i]]+'</option>';
+        }
+        elem = elem + '</select>';
         var contentId = document.getElementById('tab_last_digit-content'),
-            content = text.localize('<div class="grd-parent">'+
+            content = '<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
-                        '<form class=smallfont action="https://www.binaryqa23.com/trade/last_digit_info?l=EN" method="post">'+
-                        '<div class="grd-grid-mobile-12">Select market : <select class="smallfont" name="underlying"><option value="R_100">Random 100 Index</option><option value="R_25">Random 25 Index</option><option value="R_50">Random 50 Index</option><option value="R_75">Random 75 Index</option><option value="RDBEAR">Random Bear</option><option value="RDBULL">Random Bull</option><option selected="selected" value="RDMARS">Random Mars</option><option value="RDMOON">Random Moon</option><option value="RDSUN">Random Sun</option><option value="RDVENUS">Random Venus</option><option value="RDYANG">Random Yang</option><option value="RDYIN">Random Yin</option></select></div>'+
-                        '<div class="grd-grid-mobile-12">Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select></div>'+
+                        '<form class=smallfont action="'+ page.url.url_for('trade/last_digit_info') +'" method="post">'+
+                        '<div class="grd-grid-mobile-12">'+ text.localize('Select market :'+ elem) +' </div>'+
+                        '<div class="grd-grid-mobile-12">'+ text.localize('Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select>')+'</div>'+
                         '</form>'+
                         '</div>'+
                         '<div id="last_digit_histo" class="grd-grid-8 grd-grid-mobile-12 grd-centered"></div>'+
-                        '<div id="last_digit_title" class="grd-hide">Binaryqa23.com - Last digits for the latest %1 ticks on %2</div>'+
-                        '</div>');
+                        '<div id="last_digit_title" class="grd-hide">'+ text.localize(domain.replace(domain[0],domain[0].toUpperCase()) +' - Last digits for the latest %1 ticks on %2') +'</div>'+
+                        '</div>';
         contentId.innerHTML = content;
         $('[name=underlying]').val($('#underlying option:selected').val());
         
@@ -108,16 +127,20 @@ BetAnalysis.DigitInfoWS.prototype = {
         }).addClass('unbind_later');
 
         var get_latest = function() {
-            var request = JSON.parse('{"ticks_history":"'+ $('[name=underlying] option:selected').val() +'",'+
+            that.updateChart = 0;
+            var symbol = $('[name=underlying] option:selected').val();
+            var request = JSON.parse('{"ticks_history":"'+ symbol +'",'+
                                         '"end": "latest",'+
                                         '"count": '+ $('[name=tick_count]', form).val() +','+
                                         '"req_id": 2}');
-            if($('#underlying option:selected').val() != $('[name=underlying]', form).val()){
-                request['subscribe']=1;
-            }
-            if(that.stream_id != null){
-                BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
-                that.stream_id = null;
+            if(that.chart.series[0].name !== symbol){
+                if($('#underlying option:selected').val() != $('[name=underlying]', form).val()){
+                    request['subscribe']=1;
+                }
+                if(that.stream_id !== null ){
+                    BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
+                    that.stream_id = null;
+                }
             }
             BinarySocket.send(request);
         };
@@ -138,6 +161,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         this.chart.addSeries({name : underlying, data: []});
 
         this.update();
+        this.updateChart = 1;
     },
     update: function(symbol, latest_spot) {
         if(typeof this.chart === "undefined") {
@@ -173,12 +197,30 @@ BetAnalysis.DigitInfoWS.prototype = {
         var min_index = filtered_spots.indexOf(min);
         var max_index = filtered_spots.indexOf(max);
         // changing color
-        if (min_max_counter[min] === 1) {
+        if (min_max_counter[min] >= 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
+            if(this.prev_min_index === -1){
+                this.prev_min_index = min_index;
+            } else if(this.prev_min_index != min_index){
+                if(typeof(filtered_spots[this.prev_min_index]) === 'object'){
+                    filtered_spots[this.prev_min_index] = {y: filtered_spots[this.prev_min_index].y, color: '#e1f0fb'};
+                } else
+                    filtered_spots[this.prev_min_index] = {y: filtered_spots[this.prev_min_index], color: '#e1f0fb'};
+                this.prev_min_index = min_index;
+            }
         }
 
-        if (min_max_counter[max] === 1) {
+        if (min_max_counter[max] >= 1) {
             filtered_spots[max_index] = {y: max, color: '#2E8836'};
+            if(this.prev_max_index === -1){
+                this.prev_max_index = max_index;
+            } else if(this.prev_max_index != max_index){
+                if(typeof(filtered_spots[this.prev_max_index]) === 'object'){
+                    filtered_spots[this.prev_max_index] = {y: filtered_spots[this.prev_max_index].y, color: '#e1f0fb'};
+                } else
+                    filtered_spots[this.prev_max_index] = {y: filtered_spots[this.prev_max_index], color: '#e1f0fb'};
+                this.prev_max_index = max_index;
+            }
         }
         return series.setData(filtered_spots);
     },
@@ -202,15 +244,20 @@ BetAnalysis.DigitInfoWS.prototype = {
         this.spots = [];
     },
     update_chart: function(tick){
-        if(tick.req_id === 2){
-            this.stream_id = tick.tick.id;
-            this.update(tick.tick.symbol, tick.tick.quote);
-        } else{
-            if(!this.stream_id){
-                this.update(tick.tick.symbol, tick.tick.quote);
+        if(this.updateChart === 1){
+            if(tick.req_id === 2){
+                if(this.chart.series[0].name === tick.tick.symbol){
+                    this.stream_id = tick.tick.id || null;
+                    this.update(tick.tick.symbol, tick.tick.quote);
+                } else{
+                    BinarySocket.send(JSON.parse('{"forget":"'+tick.tick.id+'"}'));
+                }
+            } else{
+                if(!this.stream_id){
+                    this.update(tick.tick.symbol, tick.tick.quote);
+                }
             }
         }
-        
     }
 };
 
