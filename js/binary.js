@@ -61935,26 +61935,23 @@ var Barriers = (function () {
 
     this.spots = [];
     this.stream_id = null;
-    this.updateChart = 0; //Removes anomalies for slow connections, yes ANOMALIES :D
-    /*this.prev_min_index=-1;
-    this.prev_max_index=-1;*/
-    
+    this.updateChart = 0; //Removes anomalies for slow connections, yes like interstellar anomalies :D
 };
 
 BetAnalysis.DigitInfoWS.prototype = {
     add_content: function(){
         var domain = document.domain.split('.').slice(-2).join('.');
-        console.log(domain);
+        domain.replace(domain[0],domain[0].toUpperCase());
         var contentId = document.getElementById('tab_last_digit-content'),
-            content = text.localize('<div class="grd-parent">'+
+            content = '<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
                         '<form class=smallfont action="'+ page.url.url_for('trade/last_digit_info') +'" method="post">'+
-                        '<div class="grd-grid-mobile-12">Select market : <select class="smallfont" name="underlying"><option value="R_100">Random 100 Index</option><option value="R_25">Random 25 Index</option><option value="R_50">Random 50 Index</option><option value="R_75">Random 75 Index</option><option value="RDBEAR">Random Bear</option><option value="RDBULL">Random Bull</option><option selected="selected" value="RDMARS">Random Mars</option><option value="RDMOON">Random Moon</option><option value="RDSUN">Random Sun</option><option value="RDVENUS">Random Venus</option><option value="RDYANG">Random Yang</option><option value="RDYIN">Random Yin</option></select></div>'+
+                        '<div class="grd-grid-mobile-12">Select market : '+ $('#underlying').removeAttr('id').attr('name','underlying') +'</div>'+
                         '<div class="grd-grid-mobile-12">Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select></div>'+
                         '</form>'+
                         '</div>'+
                         '<div id="last_digit_histo" class="grd-grid-8 grd-grid-mobile-12 grd-centered"></div>'+
-                        '<div id="last_digit_title" class="grd-hide">'+ domain +' - Last digits for the latest %1 ticks on %2</div>'+
+                        text.localize('<div id="last_digit_title" class="grd-hide">'+ domain +' - Last digits for the latest %1 ticks on %2</div>'+
                         '</div>');
         contentId.innerHTML = content;
         $('#last_digit_title').css('textTransform', 'capitalize')
@@ -62040,23 +62037,10 @@ BetAnalysis.DigitInfoWS.prototype = {
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
-            /*if(this.prev_min_index == -1){
-                this.prev_min_index = min_index;
-            } else if(this.prev_min_index != min_index){
-                filtered_spots[this.prev_min_index] = {color: '#e1f0fb'};
-                this.prev_min_index = min_index;
-            }*/
-            
         }
 
         if (min_max_counter[max] === 1) {
             filtered_spots[max_index] = {y: max, color: '#2E8836'};
-            /*if(this.prev_max_index == -1){
-                this.prev_max_index = max_index;
-            } else if(this.prev_max_index != max_index){
-                filtered_spots[this.prev_max_index] = {color: '#e1f0fb'};
-                this.prev_max_index = max_index;
-            }*/
         }
         return series.setData(filtered_spots);
     },
