@@ -181,14 +181,27 @@ BetAnalysis.DigitInfoWS.prototype = {
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
-            /*if(this.prev_min[0] == -1){
+            if(this.prev_min[0] == -1){
                 this.prev_min[0] = min_index;
                 this.prev_min[1] = min;
-            }*/
+            } else if(this.prev_min[0] != min_index){
+                filtered_spots[this.prev_min[0]] = {y: this.prev_min[1], color: '#e1f0fb'};
+                this.prev_min[0] = min_index;
+                this.prev_min[1] = min;
+            }
+            
         }
 
         if (min_max_counter[max] === 1) {
             filtered_spots[max_index] = {y: max, color: '#2E8836'};
+            if(this.prev_max[0] == -1){
+                this.prev_max[0] = max_index;
+                this.prev_max[1] = max;
+            } else if(this.prev_max[0] != max_index){
+                filtered_spots[this.prev_max[0]] = {y: this.prev_max[1], color: '#e1f0fb'};
+                this.prev_max[0] = max_index;
+                this.prev_max[1] = max;
+            }
         }
         return series.setData(filtered_spots);
     },
