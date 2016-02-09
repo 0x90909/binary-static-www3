@@ -76,12 +76,15 @@ var Price = (function() {
             if (!endTime2) {
                 var trading_times = Durations.trading_times();
                 if (trading_times.hasOwnProperty(endDate2) && typeof trading_times[endDate2][underlying.value] === 'object' && trading_times[endDate2][underlying.value].length && trading_times[endDate2][underlying.value][0] !== '--') {
-                    endTime2 = trading_times[endDate2][underlying.value];
+                    if( trading_times[endDate2][underlying.value].length>1)
+                        endTime2 = trading_times[endDate2][underlying.value][1];
+                    else
+                         endTime2=trading_times[endDate2][underlying.value];
                 }
             }
 
             proposal['date_expiry'] = moment.utc(endDate2 + " " + endTime2).unix();
-            console.log(proposal['date_expiry']+"-"+endTime2+"-"+endDate2);
+            console.log(proposal['date_expiry']+"-"+endTime2+"-"+endDate2+"-"+underlying.value);
             // For stopping tick trade behaviour
             proposal['duration_unit'] = "m";
         }
