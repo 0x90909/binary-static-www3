@@ -81,6 +81,7 @@ var Price = (function() {
             }
 
             proposal['date_expiry'] = moment.utc(endDate2 + " " + endTime2).unix();
+            console.log(proposal['date_expiry']+":"+endTime2);
             // For stopping tick trade behaviour
             proposal['duration_unit'] = "m";
         }
