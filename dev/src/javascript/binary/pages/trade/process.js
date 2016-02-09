@@ -298,7 +298,8 @@ function processTick(tick) {
         }
         updateWarmChart();
     } else {
-        digit_info.update_chart(tick);
+        if(digit_info)
+            digit_info.update_chart(tick);
     }
 }
 
