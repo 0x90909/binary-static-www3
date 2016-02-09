@@ -112,6 +112,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         }).addClass('unbind_later');
 
         var get_latest = function() {
+            that.updateChart = 0;
             var request = JSON.parse('{"ticks_history":"'+ $('[name=underlying] option:selected').val() +'",'+
                                         '"end": "latest",'+
                                         '"count": '+ $('[name=tick_count]', form).val() +','+
@@ -123,7 +124,6 @@ BetAnalysis.DigitInfoWS.prototype = {
                 BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
                 that.stream_id = null;
             }
-            that.updateChart = 0;
             BinarySocket.send(request);
         };
         $('[name=underlying]', form).on('change',  get_latest ).addClass('unbind_later');
