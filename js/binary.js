@@ -62041,7 +62041,7 @@ BetAnalysis.DigitInfoWS.prototype = {
                 this.prev_min[0] = min_index;
                 this.prev_min[1] = min;
             } else if(this.prev_min[0] != min_index){
-                filtered_spots[this.prev_min[0]] = {y: this.prev_min[1], color: '#e1f0fb'};
+                filtered_spots[this.prev_min[0]] = {color: '#e1f0fb'};
                 this.prev_min[0] = min_index;
                 this.prev_min[1] = min;
             }
@@ -62054,7 +62054,7 @@ BetAnalysis.DigitInfoWS.prototype = {
                 this.prev_max[0] = max_index;
                 this.prev_max[1] = max;
             } else if(this.prev_max[0] != max_index){
-                filtered_spots[this.prev_max[0]] = {y: this.prev_max[1], color: '#e1f0fb'};
+                filtered_spots[this.prev_max[0]] = {color: '#e1f0fb'};
                 this.prev_max[0] = max_index;
                 this.prev_max[1] = max;
             }
