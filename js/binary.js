@@ -61986,7 +61986,6 @@ BetAnalysis.DigitInfoWS.prototype = {
         $('[name=tick_count]', form).on('change',  get_latest ).addClass('unbind_later');
     },
     show_chart: function(underlying, spots) {
-        this.updateChart = 1;
         this.chart_config.xAxis.title = {
             text: $('#last_digit_title').html().replace('%2', $('[name=underlying] option:selected').text()).replace('%1',spots.length),
         };
@@ -62000,6 +61999,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         this.chart.addSeries({name : underlying, data: []});
 
         this.update();
+        this.updateChart = 1;
     },
     update: function(symbol, latest_spot) {
         if(typeof this.chart === "undefined") {
