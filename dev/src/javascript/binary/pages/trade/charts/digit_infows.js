@@ -79,8 +79,10 @@ BetAnalysis.DigitInfoWS = function() {
 
     this.spots = [];
     this.stream_id = null;
+    this.updateChart = 0; //Removes anomalies for slow connections, yes ANOMALIES :D
     this.prev_min=[-1,-1];
     this.prev_max=[-1,-1];
+    
 };
 
 BetAnalysis.DigitInfoWS.prototype = {
@@ -121,13 +123,14 @@ BetAnalysis.DigitInfoWS.prototype = {
                 BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
                 that.stream_id = null;
             }
-            that.chart.destroy();
+            that.updateChart = 0;
             BinarySocket.send(request);
         };
         $('[name=underlying]', form).on('change',  get_latest ).addClass('unbind_later');
         $('[name=tick_count]', form).on('change',  get_latest ).addClass('unbind_later');
     },
     show_chart: function(underlying, spots) {
+        this.updateChart = 1;
         this.chart_config.xAxis.title = {
             text: $('#last_digit_title').html().replace('%2', $('[name=underlying] option:selected').text()).replace('%1',spots.length),
         };
@@ -178,7 +181,10 @@ BetAnalysis.DigitInfoWS.prototype = {
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
-            //if(prev_min[])
+            /*if(this.prev_min[0] == -1){
+                this.prev_min[0] = min_index;
+                this.prev_min[1] = min;
+            }*/
         }
 
         if (min_max_counter[max] === 1) {
@@ -206,15 +212,16 @@ BetAnalysis.DigitInfoWS.prototype = {
         this.spots = [];
     },
     update_chart: function(tick){
-        if(tick.req_id === 2){
-            this.stream_id = tick.tick.id;
-            this.update(tick.tick.symbol, tick.tick.quote);
-        } else{
-            if(!this.stream_id){
+        if(this.updateChart === 1){
+            if(tick.req_id === 2){
+                this.stream_id = tick.tick.id;
                 this.update(tick.tick.symbol, tick.tick.quote);
+            } else{
+                if(!this.stream_id){
+                    this.update(tick.tick.symbol, tick.tick.quote);
+                }
             }
         }
-        
     }
 };
 
