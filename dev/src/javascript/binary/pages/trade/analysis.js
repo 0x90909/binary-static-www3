@@ -54,9 +54,6 @@ var TradingAnalysis = (function() {
               '</div>' +
             '</div>' +
           '</div>';
-        if (formName === 'digits') {
-            $('#tab_last_digit').removeClass("invisible");
-        }
         sessionStorage.setItem('currentAnalysisTab', getActiveTab());
         bindAnalysisTabEvent();
         loadAnalysisTab();
@@ -117,16 +114,8 @@ var TradingAnalysis = (function() {
                     BetAnalysis.tab_live_chart.render(true);
                 }
             } else {
-                if (currentTab == 'tab_last_digit') {
-                    trading_digit_info = new BetAnalysis.DigitInfoWS();
-                    var request = JSON.parse('{"ticks_history":"'+ $('#underlying option:selected').val() +'",'+
-                                              '"end": "latest",'+
-                                              '"count": 100,'+
-                                              '"req_id": 1}');
-                    BinarySocket.send(request);
-                } else{
-                    var url = currentLink.getAttribute('href') ;
-                    $.ajax({
+                var url = currentLink.getAttribute('href');
+                $.ajax({
                         method: 'GET',
                         url: url,
                     })
@@ -139,7 +128,6 @@ var TradingAnalysis = (function() {
                         }
 
                     });
-                }
             }
         }
 
