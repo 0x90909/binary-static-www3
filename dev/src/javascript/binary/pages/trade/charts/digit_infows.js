@@ -84,12 +84,25 @@ BetAnalysis.DigitInfoWS = function() {
 
 BetAnalysis.DigitInfoWS.prototype = {
     add_content: function(){
-        var domain = document.domain.split('.').slice(-2).join('.');
+        var domain = document.domain.split('.').slice(-2).join('.'),
+            underlyings =[];
+        var symbols = Symbols.getAllSymbols();
+        for(var key in symbols){
+            if(symbols[key].split(" ")[0] === 'Random'){
+                underlyings = key;
+            }
+        }
+        underlyings = underlyings.sort();
+        var elem = '<select class="smallfont" name="underlying">';
+        for(i=0;i<underlyings.length;i++){
+            elem = elem + '<option value="'+underlyings[i]+'">'+symbols[underlyings[i]]+'</option>';
+        }
+        elem = elem + '</select>';
         var contentId = document.getElementById('tab_last_digit-content'),
             content = '<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
                         '<form class=smallfont action="'+ page.url.url_for('trade/last_digit_info') +'" method="post">'+
-                        '<div class="grd-grid-mobile-12">Select market : </div>'+
+                        '<div class="grd-grid-mobile-12">Select market :'+ elem +' </div>'+
                         '<div class="grd-grid-mobile-12">Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select></div>'+
                         '</form>'+
                         '</div>'+
