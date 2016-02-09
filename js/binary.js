@@ -61943,9 +61943,10 @@ BetAnalysis.DigitInfoWS.prototype = {
         var domain = document.domain.split('.').slice(-2).join('.'),
             underlyings =[];
         var symbols = Symbols.getAllSymbols();
+        i=0;
         for(var key in symbols){
             if(symbols[key].split(" ")[0] === 'Random'){
-                underlyings = key;
+                underlyings[i++] = key;
             }
         }
         underlyings = underlyings.sort();
