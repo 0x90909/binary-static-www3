@@ -90,7 +90,7 @@ BetAnalysis.DigitInfoWS.prototype = {
             content = '<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
                         '<form class=smallfont action="'+ page.url.url_for('trade/last_digit_info') +'" method="post">'+
-                        '<div class="grd-grid-mobile-12">Select market : '+ $('#underlying').removeAttr('id').attr('name','underlying') +'</div>'+
+                        '<div class="grd-grid-mobile-12">Select market : </div>'+
                         '<div class="grd-grid-mobile-12">Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select></div>'+
                         '</form>'+
                         '</div>'+
@@ -98,7 +98,6 @@ BetAnalysis.DigitInfoWS.prototype = {
                         text.localize('<div id="last_digit_title" class="grd-hide">'+ domain +' - Last digits for the latest %1 ticks on %2</div>'+
                         '</div>');
         contentId.innerHTML = content;
-        $('#last_digit_title').css('textTransform', 'capitalize')
         $('[name=underlying]').val($('#underlying option:selected').val());
         
     },
