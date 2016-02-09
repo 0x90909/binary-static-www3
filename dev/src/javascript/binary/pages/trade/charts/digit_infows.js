@@ -80,13 +80,15 @@ BetAnalysis.DigitInfoWS = function() {
     this.spots = [];
     this.stream_id = null;
     this.updateChart = 0; //Removes anomalies for slow connections, yes ANOMALIES :D
-    this.prev_min_index=-1;
-    this.prev_max_index=-1;
+    /*this.prev_min_index=-1;
+    this.prev_max_index=-1;*/
     
 };
 
 BetAnalysis.DigitInfoWS.prototype = {
     add_content: function(){
+        var domain = document.domain.split('.').slice(-2).join('.');
+        console.log(domain);
         var contentId = document.getElementById('tab_last_digit-content'),
             content = text.localize('<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
@@ -96,9 +98,10 @@ BetAnalysis.DigitInfoWS.prototype = {
                         '</form>'+
                         '</div>'+
                         '<div id="last_digit_histo" class="grd-grid-8 grd-grid-mobile-12 grd-centered"></div>'+
-                        '<div id="last_digit_title" class="grd-hide">'+  +' - Last digits for the latest %1 ticks on %2</div>'+
+                        '<div id="last_digit_title" class="grd-hide">'+ domain +' - Last digits for the latest %1 ticks on %2</div>'+
                         '</div>');
         contentId.innerHTML = content;
+        $('#last_digit_title').css('textTransform', 'capitalize')
         $('[name=underlying]').val($('#underlying option:selected').val());
         
     },
@@ -181,23 +184,23 @@ BetAnalysis.DigitInfoWS.prototype = {
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
-            if(this.prev_min_index == -1){
+            /*if(this.prev_min_index == -1){
                 this.prev_min_index = min_index;
             } else if(this.prev_min_index != min_index){
                 filtered_spots[this.prev_min_index] = {color: '#e1f0fb'};
                 this.prev_min_index = min_index;
-            }
+            }*/
             
         }
 
         if (min_max_counter[max] === 1) {
             filtered_spots[max_index] = {y: max, color: '#2E8836'};
-            if(this.prev_max_index == -1){
+            /*if(this.prev_max_index == -1){
                 this.prev_max_index = max_index;
             } else if(this.prev_max_index != max_index){
                 filtered_spots[this.prev_max_index] = {color: '#e1f0fb'};
                 this.prev_max_index = max_index;
-            }
+            }*/
         }
         return series.setData(filtered_spots);
     },
