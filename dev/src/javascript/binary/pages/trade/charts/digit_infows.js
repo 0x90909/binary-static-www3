@@ -103,8 +103,8 @@ BetAnalysis.DigitInfoWS.prototype = {
             content = '<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
                         '<form class=smallfont action="'+ page.url.url_for('trade/last_digit_info') +'" method="post">'+
-                        '<div class="grd-grid-mobile-12">Select market :'+ elem +' </div>'+
-                        '<div class="grd-grid-mobile-12">Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select></div>'+
+                        text.localize('<div class="grd-grid-mobile-12">Select market :'+ elem +' </div>')+
+                        text.localize('<div class="grd-grid-mobile-12">Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select></div>')+
                         '</form>'+
                         '</div>'+
                         '<div id="last_digit_histo" class="grd-grid-8 grd-grid-mobile-12 grd-centered"></div>'+
@@ -132,7 +132,7 @@ BetAnalysis.DigitInfoWS.prototype = {
             if($('#underlying option:selected').val() != $('[name=underlying]', form).val()){
                 request['subscribe']=1;
             }
-            if(that.stream_id != null){
+            if(that.stream_id !== null){
                 BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
                 that.stream_id = null;
             }
