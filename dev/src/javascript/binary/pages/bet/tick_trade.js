@@ -18,7 +18,7 @@ var TickDisplay = function() {
             $self.contract_start_ms = parseInt(data.contract_start * 1000);
             $self.contract_category = data.contract_category;
             $self.set_barrier = ($self.contract_category.match('digits')) ? false : true;
-            $self.display_decimals = data.display_decimals || 2;
+            $self.display_decimals = data.display_decimals;
             var tick_frequency = 5;
 
             if (data.show_contract_result) {
@@ -90,7 +90,7 @@ var TickDisplay = function() {
                 tooltip: {
                     formatter: function () {
                         var that = this;
-                        var new_y = that.y;
+                        var new_y = that.y.toFixed($self.display_decimals);
                         var mom = moment.utc($self.applicable_ticks[that.x].epoch*1000).format("dddd, MMM D, HH:mm:ss");
                         return mom + "<br/>" + $self.display_symbol + " " + new_y;
                     },
