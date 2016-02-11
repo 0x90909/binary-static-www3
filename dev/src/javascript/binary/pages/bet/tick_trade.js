@@ -90,7 +90,7 @@ var TickDisplay = function() {
                 tooltip: {
                     formatter: function () {
                         var that = this;
-                        var new_y = that.y.toFixed($self.display_decimals);
+                        var new_y = that.y;
                         var mom = moment.utc($self.applicable_ticks[that.x].epoch*1000).format("dddd, MMM D, HH:mm:ss");
                         return mom + "<br/>" + $self.display_symbol + " " + new_y;
                     },
