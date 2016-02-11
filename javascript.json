@@ -88,7 +88,6 @@
     "src/javascript/binary/pages/resources/market_timesws.js",
     "src/javascript/binary/pages/trade/analysis.js",
     "src/javascript/binary/pages/trade/barriers.js",
-    "src/javascript/binary/pages/trade/charts/digit_infows.js",
     "src/javascript/binary/pages/trade/common.js",
     "src/javascript/binary/pages/trade/content.js",
     "src/javascript/binary/pages/trade/contract.js",
