@@ -76,10 +76,7 @@ var Price = (function() {
             if (!endTime2) {
                 var trading_times = Durations.trading_times();
                 if (trading_times.hasOwnProperty(endDate2) && typeof trading_times[endDate2][underlying.value] === 'object' && trading_times[endDate2][underlying.value].length && trading_times[endDate2][underlying.value][0] !== '--') {
-                    if( trading_times[endDate2][underlying.value].length>1)
-                        endTime2 = trading_times[endDate2][underlying.value][1];
-                    else
-                         endTime2=trading_times[endDate2][underlying.value];
+                    endTime2 = trading_times[endDate2][underlying.value];
                 }
             }
 
