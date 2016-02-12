@@ -62051,7 +62051,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         var max_index = filtered_spots.indexOf(max);
         console.log(min_index+'-'+max_index);
         // changing color
-        if (min_max_counter[min] === 1) {
+        if (min_max_counter[min] >= 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
             if(this.prev_min_index === -1){
                 this.prev_min_index = min_index;
@@ -62061,7 +62061,7 @@ BetAnalysis.DigitInfoWS.prototype = {
             }
         }
 
-        if (min_max_counter[max] === 1) {
+        if (min_max_counter[max] >= 1) {
             filtered_spots[max_index] = {y: max, color: '#2E8836'};
             if(this.prev_max_index === -1){
                 this.prev_max_index = max_index;
