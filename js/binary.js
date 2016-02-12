@@ -62049,6 +62049,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         var max = Math.max.apply(null, filtered_spots);
         var min_index = filtered_spots.indexOf(min);
         var max_index = filtered_spots.indexOf(max);
+        console.log(min+''+max);
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
