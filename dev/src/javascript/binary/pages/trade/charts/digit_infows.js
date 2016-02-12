@@ -164,7 +164,6 @@ BetAnalysis.DigitInfoWS.prototype = {
         this.updateChart = 1;
     },
     update: function(symbol, latest_spot) {
-        console.log('Update called.');
         if(typeof this.chart === "undefined") {
             return;
         }
