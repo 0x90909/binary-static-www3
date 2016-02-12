@@ -62054,6 +62054,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         if (min_max_counter[max] === 1) {
             filtered_spots[max_index] = {y: max, color: '#2E8836'};
         }
+        console.log(filtered_spots);
         return series.setData(filtered_spots);
     },
     show_tab: function() {
