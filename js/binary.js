@@ -61936,6 +61936,8 @@ var Barriers = (function () {
     this.spots = [];
     this.stream_id = null;
     this.updateChart = 0; //Removes anomalies for slow connections, yes like interstellar anomalies :D
+    this.prev_min_index = -1;
+    this.prev_max_index = -1;
 };
 
 BetAnalysis.DigitInfoWS.prototype = {
@@ -62049,10 +62051,22 @@ BetAnalysis.DigitInfoWS.prototype = {
         // changing color
         if (min_max_counter[min] === 1) {
             filtered_spots[min_index] = {y: min, color: '#CC0000'};
+            if(this.prev_min_index === -1){
+                this.prev_min_index = min_index;
+            } else if(this.prev_min_index != min_index){
+                filtered_spots[this.prev_min_index] = {y: filtered_spots[this.prev_min_index], color: '#e9e9e9'};
+                this.prev_min_index = min_index;
+            }
         }
 
         if (min_max_counter[max] === 1) {
             filtered_spots[max_index] = {y: max, color: '#2E8836'};
+            if(this.prev_max_index === -1){
+                this.prev_max_index = max_index;
+            } else if(this.prev_max_index != max_index){
+                filtered_spots[this.prev_max_index] = {y: filtered_spots[this.prev_max_index], color: '#e9e9e9'};
+                this.prev_max_index = max_index;
+            }
         }
         console.log(filtered_spots);
         return series.setData(filtered_spots);
