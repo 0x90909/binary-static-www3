@@ -80,6 +80,7 @@ BetAnalysis.DigitInfoWS = function() {
     this.spots = [];
     this.stream_id = null;
     this.updateChart = 0; //Removes anomalies for slow connections, yes like interstellar anomalies :D
+    // To avoid too many greens and reds
     this.prev_min_index = -1;
     this.prev_max_index = -1;
 };
@@ -105,13 +106,13 @@ BetAnalysis.DigitInfoWS.prototype = {
             content = '<div class="grd-parent">'+
                         '<div id="last_digit_histo_form" class="grd-grid-8 grd-grid-mobile-12 grd-centered">'+
                         '<form class=smallfont action="'+ page.url.url_for('trade/last_digit_info') +'" method="post">'+
-                        text.localize('<div class="grd-grid-mobile-12">Select market :'+ elem +' </div>')+
+                        '<div class="grd-grid-mobile-12">Select market :'+ text.localize(elem) +' </div>'+
                         text.localize('<div class="grd-grid-mobile-12">Number of ticks : <select class="smallfont" name="tick_count"><option value="25">25</option><option value="50">50</option><option selected="selected" value="100">100</option><option value="500">500</option><option value="1000">1000</option></select></div>')+
                         '</form>'+
                         '</div>'+
                         '<div id="last_digit_histo" class="grd-grid-8 grd-grid-mobile-12 grd-centered"></div>'+
-                        text.localize('<div id="last_digit_title" class="grd-hide">'+ domain.replace(domain[0],domain[0].toUpperCase()) +' - Last digits for the latest %1 ticks on %2</div>'+
-                        '</div>');
+                        '<div id="last_digit_title" class="grd-hide">'+ text.localize(domain.replace(domain[0],domain[0].toUpperCase()) +' - Last digits for the latest %1 ticks on %2') +'</div>'+
+                        '</div>';
         contentId.innerHTML = content;
         $('[name=underlying]').val($('#underlying option:selected').val());
         
@@ -212,7 +213,6 @@ BetAnalysis.DigitInfoWS.prototype = {
                 this.prev_max_index = max_index;
             }
         }
-        console.log(filtered_spots);
         return series.setData(filtered_spots);
     },
     show_tab: function() {
