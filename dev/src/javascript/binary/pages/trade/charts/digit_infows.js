@@ -199,7 +199,10 @@ BetAnalysis.DigitInfoWS.prototype = {
             if(this.prev_min_index === -1){
                 this.prev_min_index = min_index;
             } else if(this.prev_min_index != min_index){
-                filtered_spots[this.prev_min_index] = {y: filtered_spots[this.prev_min_index], color: '#e1f0fb'};
+                if(typeof(filtered_spots[this.prev_min_index]) === 'object'){
+                    filtered_spots[this.prev_min_index] = {y: filtered_spots[this.prev_min_index].y, color: '#e1f0fb'};
+                } else
+                    filtered_spots[this.prev_min_index] = {y: filtered_spots[this.prev_min_index], color: '#e1f0fb'};
                 this.prev_min_index = min_index;
             }
         }
@@ -209,7 +212,10 @@ BetAnalysis.DigitInfoWS.prototype = {
             if(this.prev_max_index === -1){
                 this.prev_max_index = max_index;
             } else if(this.prev_max_index != max_index){
-                filtered_spots[this.prev_max_index] = {y: filtered_spots[this.prev_max_index], color: '#e1f0fb'};
+                if(typeof(filtered_spots[this.prev_max_index]) === 'object'){
+                    filtered_spots[this.prev_max_index] = {y: filtered_spots[this.prev_max_index].y, color: '#e1f0fb'};
+                } else
+                    filtered_spots[this.prev_max_index] = {y: filtered_spots[this.prev_max_index], color: '#e1f0fb'};
                 this.prev_max_index = max_index;
             }
         }
