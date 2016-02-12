@@ -62099,8 +62099,12 @@ BetAnalysis.DigitInfoWS.prototype = {
     update_chart: function(tick){
         if(this.updateChart === 1){
             if(tick.req_id === 2){
-                this.stream_id = tick.tick.id || null;
-                this.update(tick.tick.symbol, tick.tick.quote);
+                if(this.chart.series[0].name === tick.tick.symbol){
+                    this.stream_id = tick.tick.id || null;
+                    this.update(tick.tick.symbol, tick.tick.quote);
+                } else{
+                    BinarySocket.send(JSON.parse('{"forget":"'+tick.tick.id+'"}'));
+                }
             } else{
                 if(!this.stream_id){
                     this.update(tick.tick.symbol, tick.tick.quote);
