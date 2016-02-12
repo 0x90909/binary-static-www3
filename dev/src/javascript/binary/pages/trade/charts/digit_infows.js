@@ -133,12 +133,14 @@ BetAnalysis.DigitInfoWS.prototype = {
                                         '"end": "latest",'+
                                         '"count": '+ $('[name=tick_count]', form).val() +','+
                                         '"req_id": 2}');
-            if($('#underlying option:selected').val() != $('[name=underlying]', form).val() && that.chart.series[0].name !== symbol){
-                request['subscribe']=1;
-            }
-            if(that.stream_id !== null){
-                BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
-                that.stream_id = null;
+            if(that.chart.series[0].name !== symbol){
+                if($('#underlying option:selected').val() != $('[name=underlying]', form).val()){
+                    request['subscribe']=1;
+                }
+                if(that.stream_id !== null ){
+                    BinarySocket.send(JSON.parse('{"forget": "'+ that.stream_id +'"}'));
+                    that.stream_id = null;
+                }
             }
             BinarySocket.send(request);
         };
