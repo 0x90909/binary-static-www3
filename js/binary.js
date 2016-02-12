@@ -62094,7 +62094,7 @@ BetAnalysis.DigitInfoWS.prototype = {
     update_chart: function(tick){
         if(this.updateChart === 1){
             if(tick.req_id === 2){
-                this.stream_id = tick.tick.id;
+                this.stream_id = tick.tick.id || null;
                 this.update(tick.tick.symbol, tick.tick.quote);
             } else{
                 if(!this.stream_id){
