@@ -128,11 +128,12 @@ BetAnalysis.DigitInfoWS.prototype = {
 
         var get_latest = function() {
             that.updateChart = 0;
-            var request = JSON.parse('{"ticks_history":"'+ $('[name=underlying] option:selected').val() +'",'+
+            var symbol = $('[name=underlying] option:selected').val();
+            var request = JSON.parse('{"ticks_history":"'+ symbol +'",'+
                                         '"end": "latest",'+
                                         '"count": '+ $('[name=tick_count]', form).val() +','+
                                         '"req_id": 2}');
-            if($('#underlying option:selected').val() != $('[name=underlying]', form).val()){
+            if($('#underlying option:selected').val() != $('[name=underlying]', form).val() && this.chart.series[0].name !== symbol){
                 request['subscribe']=1;
             }
             if(that.stream_id !== null){
@@ -161,6 +162,7 @@ BetAnalysis.DigitInfoWS.prototype = {
         this.updateChart = 1;
     },
     update: function(symbol, latest_spot) {
+        console.log('Update called.');
         if(typeof this.chart === "undefined") {
             return;
         }
